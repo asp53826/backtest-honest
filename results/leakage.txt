@@ -1,0 +1,40 @@
+  most of their outcome. Features come only from past draws. The
+  correct answer at every horizon is a score of zero.
+
+   horizon      plain k-fold            purged      purged+embargo   dropped
+  ----------------------------------------------------------------------------
+         1      0.0003 ±0.0052      0.0004 ±0.0052        0.0003 ±0.0051     2.2%
+         5     -0.0038 ±0.0064     -0.0045 ±0.0063       -0.0021 ±0.0063     2.8%
+        20     -0.0018 ±0.0106     -0.0059 ±0.0110       -0.0091 ±0.0112     5.3%
+        50      0.0094 ±0.0101      0.0033 ±0.0104        0.0046 ±0.0105    10.3%
+       100      0.0322 ±0.0116      0.0072 ±0.0111        0.0053 ±0.0117    18.7%
+
+  60 seeds; ± is the standard error of the mean.
+
+  Plain k-fold reports skill that cannot exist, and it grows with the
+  label horizon exactly as the overlap argument predicts — nothing at
+  horizon 1 where labels do not overlap, and clearly non-zero by 100.
+
+  Purging removes most of it but the residual is not reliably zero.
+  Read the error bars before calling that leftover real: the correction
+  is worth what the gap between the columns says it is worth, and no
+  more than the standard errors will support.
+
+=== the cost side: purging is not free ===
+
+  Dropped training rows against label horizon, five folds.
+
+   horizon  purged only  +2% embargo  +5% embargo
+  -----------------------------------------------
+         1        0.2%         2.2%         5.2%
+         5        0.8%         2.8%         5.8%
+        20        3.3%         5.3%         8.3%
+        50        8.3%        10.3%        13.3%
+       100       16.7%        18.7%        21.7%
+       200       33.3%        35.3%        37.9%
+
+  At a 200-bar horizon on 1,200 bars, purging removes most of the
+  training set — which is the honest answer rather than a failure. A
+  label reaching that far forward genuinely does contaminate almost
+  everything adjacent to it, and a backtest that keeps those rows is
+  not training on more data, it is training on the test set.
